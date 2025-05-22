@@ -2,8 +2,20 @@
   <div class="container mx-auto px-4 py-3 flex justify-between items-center">
     <a class="text-lg font-semibold" routerLink="/">Non-Fiction Books</a>
     <div class="space-x-4">
-      <a class="hover:underline" routerLink="/auth/register">Регистрация</a>
-      <a class="hover:underline" routerLink="/auth/login">Вход</a>
+      <ng-container *ngIf="!isLoggedIn(); else loggedIn">
+        <a class="hover:underline" routerLink="/auth/register">Регистрация</a>
+        <a class="hover:underline" routerLink="/auth/login">Вход</a>
+      </ng-container>
+
+      <ng-template #loggedIn>
+        <a class="hover:underline" routerLink="/books/add">Добавить книгу</a>
+        <button
+          (click)="logout()"
+          class="hover:underline bg-transparent border-none cursor-pointer"
+        >
+          Выход
+        </button>
+      </ng-template>      
     </div>
   </div>
 </nav>

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { AuthService, RegisterData } from '../auth.service';
+import { AuthService } from '../auth.service';
+import { RegisterData } from '../auth.model';
 
 @Component({
   selector: 'app-register',

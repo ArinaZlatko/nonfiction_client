@@ -1,26 +1,36 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { API_BASE_URL } from '../core/api.config';
+import { tap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
+import { API_BASE_URL } from '../core/api.config';
+import { TokenService } from './token.service';
+import { LoginData, RegisterData, TokenResponse } from './auth.model';
 
-export interface RegisterData {
-  username: string;
-  password: string;
-  password2: string;
-  email: string;
-  first_name: string;
-  last_name: string;
-  surname: string;
-  role: string;
-}
-
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class AuthService {
-  constructor(private http: HttpClient) {}
+  private apiUrl = API_BASE_URL;
+
+  constructor(private http: HttpClient, private tokenService: TokenService) {}
 
   register(data: RegisterData): Observable<any> {
-    return this.http.post(`${API_BASE_URL}/register/`, data);
+    return this.http.post(`${this.apiUrl}/register/`, data);
+  }
+
+  login(data: LoginData): Observable<TokenResponse> {
+    return this.http.post<TokenResponse>(`${this.apiUrl}/login/`, data).pipe(
+      tap((res: TokenResponse) => {
+        this.tokenService.saveTokens(res);
+      })
+    );
+  }
+
+  logout(): Observable<any> {
+    const refresh = this.tokenService.getRefreshToken();
+    this.tokenService.clearTokens();
+    return this.http.post(`${this.apiUrl}/logout/`, { refresh });
+  }
+
+  isAuthenticated(): boolean {
+    return this.tokenService.hasAccessToken();
   }
 }
