@@ -1,3 +1,30 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Общий контейнер формы */
+.form-container {
+  @apply max-w-xl mx-auto bg-white p-6 rounded shadow-md space-y-4;
+}
+
+/* Заголовок формы */
+.form-title {
+  @apply text-xl font-semibold mb-4;
+}
+
+/* Поля ввода */
+.form-input,
+.form-select {
+  @apply w-full border-2 border-gray-300 p-2 rounded bg-white;
+  @apply focus:outline-none focus:border-2 focus:border-orange-400;
+}
+
+/* Кнопка отправки */
+.form-button {
+  @apply w-full bg-gray-800 text-white py-2 rounded hover:bg-gray-700 transition;
+}
+
+/* Ошибки */
+.form-error {
+  @apply text-red-500 text-sm mt-2;
+}

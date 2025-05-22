@@ -1,0 +1,52 @@
+<form
+  (submit)="onSubmit()"
+  enctype="multipart/form-data"
+  class="form-container"
+>
+  <h2 class="text-xl font-semibold mb-4">Добавить книгу</h2>
+
+  <div>
+    <label for="title" class="form-label">Название книги:</label>
+    <input
+      id="title"
+      type="text"
+      [(ngModel)]="title"
+      name="title"
+      required
+      class="form-input"
+    />
+  </div>
+
+  <div>
+    <label for="description" class="form-label">Описание:</label>
+    <textarea
+      id="description"
+      [(ngModel)]="description"
+      name="description"
+      required
+      class="form-input"
+    ></textarea>
+  </div>
+
+  <div>
+    <label for="cover" class="form-label">Обложка:</label>
+    <input
+      id="cover"
+      type="file"
+      (change)="onFileChange($event)"
+      accept="image/*"
+      required
+      class="form-input bg-white"
+    />
+  </div>
+
+  <button type="submit" class="form-button">Добавить книгу</button>
+
+  <div *ngIf="successMessage" class="form-success text-green-600 mt-2">
+    {{ successMessage }}
+  </div>
+
+  <div *ngIf="errorMessage" class="form-error text-red-600 mt-2">
+    {{ errorMessage }}
+  </div>
+</form>

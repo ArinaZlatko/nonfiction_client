@@ -1,1 +1,26 @@
-<p>login works!</p>
+<form (ngSubmit)="onSubmit()" class="form-container">
+  <h2 class="form-title">Вход</h2>
+
+  <input
+    [(ngModel)]="form.username"
+    name="username"
+    placeholder="Имя пользователя"
+    required
+    class="form-input"
+  />
+
+  <input
+    [(ngModel)]="form.password"
+    name="password"
+    type="password"
+    placeholder="Пароль"
+    required
+    class="form-input"
+  />
+
+  <button type="submit" class="form-button">Войти</button>
+
+  <div *ngIf="errorMessage" class="form-error">
+    {{ errorMessage }}
+  </div>
+</form>

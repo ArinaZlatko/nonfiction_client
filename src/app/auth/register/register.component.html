@@ -1,15 +1,12 @@
-<form
-  (ngSubmit)="onSubmit()"
-  class="max-w-xl mx-auto bg-white p-6 rounded shadow-md space-y-4"
->
-  <h2 class="text-xl font-semibold mb-4">Регистрация</h2>
+<form (ngSubmit)="onSubmit()" class="form-container">
+  <h2 class="form-title">Регистрация</h2>
 
   <input
     [(ngModel)]="form.username"
     name="username"
     placeholder="Имя пользователя"
     required
-    class="w-full border border-gray-300 p-2 rounded"
+    class="form-input"
   />
 
   <input
@@ -18,7 +15,7 @@
     placeholder="Email"
     type="email"
     required
-    class="w-full border border-gray-300 p-2 rounded"
+    class="form-input"
   />
 
   <input
@@ -26,7 +23,7 @@
     name="first_name"
     placeholder="Имя"
     required
-    class="w-full border border-gray-300 p-2 rounded"
+    class="form-input"
   />
 
   <input
@@ -34,21 +31,17 @@
     name="last_name"
     placeholder="Фамилия"
     required
-    class="w-full border border-gray-300 p-2 rounded"
+    class="form-input"
   />
 
   <input
     [(ngModel)]="form.surname"
     name="surname"
     placeholder="Отчество"
-    class="w-full border border-gray-300 p-2 rounded"
+    class="form-input"
   />
 
-  <select
-    [(ngModel)]="form.role"
-    name="role"
-    class="w-full border border-gray-300 p-2 rounded"
-  >
+  <select [(ngModel)]="form.role" name="role" class="form-select">
     <option value="reader">Читатель</option>
     <option value="writer">Писатель</option>
   </select>
@@ -59,7 +52,7 @@
     type="password"
     placeholder="Пароль"
     required
-    class="w-full border border-gray-300 p-2 rounded"
+    class="form-input"
   />
 
   <input
@@ -68,17 +61,12 @@
     type="password"
     placeholder="Повторите пароль"
     required
-    class="w-full border border-gray-300 p-2 rounded"
+    class="form-input"
   />
 
-  <button
-    type="submit"
-    class="w-full bg-gray-800 text-white py-2 rounded hover:bg-gray-700 transition"
-  >
-    Зарегистрироваться
-  </button>
+  <button type="submit" class="form-button">Зарегистрироваться</button>
 
-  <div *ngIf="errorMessage" class="text-red-500 text-sm mt-2">
+  <div *ngIf="errorMessage" class="form-error">
     {{ errorMessage }}
   </div>
 </form>
