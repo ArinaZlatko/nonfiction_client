@@ -60,10 +60,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "nonfiction_client:build:production"
+              "buildTarget": "nonfiction_client:build:production"
             },
             "development": {
-              "browserTarget": "nonfiction_client:build:development"
+              "buildTarget": "nonfiction_client:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -71,7 +71,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "nonfiction_client:build"
+            "buildTarget": "nonfiction_client:build"
           }
         },
         "test": {
