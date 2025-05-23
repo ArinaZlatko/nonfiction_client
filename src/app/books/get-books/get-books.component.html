@@ -1,0 +1,33 @@
+<div class="max-w-5xl mx-auto px-4 py-6">
+  <p *ngIf="errorMessage" class="text-red-600 mb-4">{{ errorMessage }}</p>
+
+  <div *ngIf="books.length === 0 && !errorMessage" class="text-gray-500">
+    Книг пока нет.
+  </div>
+
+  <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+    <div *ngFor="let book of books" class="border rounded shadow p-4 bg-white">
+      <div *ngIf="book.cover" class="mt-2">
+        <img
+          [src]="BaseUrl + book.cover"
+          alt="Обложка"
+          class="w-full max-h-48 object-cover rounded"
+        />
+      </div>
+      <div class="text-lg font-semibold mb-2">{{ book.title }}</div>
+      <div class="text-sm text-gray-600 mb-2">
+        Автор: {{ book.author.first_name | slice : 0 : 1 }}.
+        {{ book.author.last_name | slice : 0 : 1 }}. {{ book.author.surname }}
+      </div>
+
+      <div class="flex flex-wrap gap-2 mb-2">
+        <span
+          *ngFor="let genre of book.genres"
+          class="bg-orange-100 text-orange-800 text-xs font-medium px-2 py-1 rounded"
+        >
+          {{ genre.name }}
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
