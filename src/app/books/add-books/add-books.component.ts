@@ -1,36 +1,70 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { API_BASE_URL } from '../../core/api.config';
 
 @Component({
   selector: 'app-add-book',
-  templateUrl: './add-books.component.html'
+  templateUrl: './add-books.component.html',
 })
-export class AddBooksComponent {
-  title: string = '';
-  description: string = '';
+export class AddBooksComponent implements OnInit {
+  title = '';
+  description = '';
   coverFile!: File;
 
-  errorMessage: string = '';
-  successMessage: string = '';
+  genres: any[] = [];
+  selectedGenres: number[] = [];
+
+  errorMessage = '';
+  successMessage = '';
 
   constructor(private http: HttpClient) {}
 
-  onFileChange(event: any) {
-    const file = event.target.files[0];
-    if (file) {
-      this.coverFile = file;
+  ngOnInit(): void {
+    this.http.get<any[]>(`${API_BASE_URL}/genres/`).subscribe({
+      next: (data) => (this.genres = data),
+      error: () => (this.errorMessage = 'Не удалось загрузить жанры'),
+    });
+  }
+
+  onGenreChange(genreId: number, event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const isChecked = input.checked;
+
+    if (isChecked) {
+      this.selectedGenres.push(genreId);
+    } else {
+      this.selectedGenres = this.selectedGenres.filter((id) => id !== genreId);
     }
   }
 
-  onSubmit() {
+  onFileChange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    if (file) this.coverFile = file;
+  }
+
+  onSubmit(): void {
     this.errorMessage = '';
     this.successMessage = '';
+
+    if (!this.title || !this.description || !this.coverFile) {
+      this.errorMessage = 'Все поля обязательны';
+      return;
+    }
+
+    if (this.selectedGenres.length === 0) {
+      this.errorMessage = 'Пожалуйста, выберите хотя бы один жанр.';
+      return;
+    }
 
     const formData = new FormData();
     formData.append('title', this.title);
     formData.append('description', this.description);
     formData.append('cover', this.coverFile, this.coverFile.name);
+
+    this.selectedGenres.forEach((id) =>
+      formData.append('genres', id.toString())
+    );
 
     this.http.post<any>(`${API_BASE_URL}/books/upload/`, formData).subscribe({
       next: (response) => {
@@ -38,15 +72,11 @@ export class AddBooksComponent {
         this.title = '';
         this.description = '';
         this.coverFile = undefined!;
+        this.selectedGenres = [];
       },
       error: (err) => {
-        if (err.error && err.error.error) {
-          this.errorMessage = err.error.error;
-        } else {
-          this.errorMessage = 'Ошибка при загрузке книги';
-        }
-      }
+        this.errorMessage = err.error?.error || 'Ошибка при загрузке книги';
+      },
     });
   }
 }
-

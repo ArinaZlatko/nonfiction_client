@@ -29,6 +29,19 @@
   </div>
 
   <div>
+    <label class="form-label">Жанры (выберите хотя бы один):</label>
+    <div *ngFor="let genre of genres" class="form-checkbox">
+      <input
+        type="checkbox"
+        [id]="'genre-' + genre.id"
+        [value]="genre.id"
+        (change)="onGenreChange(genre.id, $event)"
+      />
+      <label [for]="'genre-' + genre.id">{{ genre.name }}</label>
+    </div>
+  </div>
+
+  <div>
     <label for="cover" class="form-label">Обложка:</label>
     <input
       id="cover"
