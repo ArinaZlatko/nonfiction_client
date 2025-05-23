@@ -1,11 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { API_BASE_URL } from '../../core/api.config';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @Component({
-    selector: 'app-add-book',
-    templateUrl: './add-books.component.html',
-    standalone: false
+  standalone: true,
+  selector: 'app-add-book',
+  templateUrl: './add-books.component.html',
+  imports: [CommonModule, FormsModule, NgSelectModule],
 })
 export class AddBooksComponent implements OnInit {
   title = '';
@@ -25,17 +29,6 @@ export class AddBooksComponent implements OnInit {
       next: (data) => (this.genres = data),
       error: () => (this.errorMessage = 'Не удалось загрузить жанры'),
     });
-  }
-
-  onGenreChange(genreId: number, event: Event): void {
-    const input = event.target as HTMLInputElement;
-    const isChecked = input.checked;
-
-    if (isChecked) {
-      this.selectedGenres.push(genreId);
-    } else {
-      this.selectedGenres = this.selectedGenres.filter((id) => id !== genreId);
-    }
   }
 
   onFileChange(event: Event): void {
@@ -70,14 +63,20 @@ export class AddBooksComponent implements OnInit {
     this.http.post<any>(`${API_BASE_URL}/books/upload/`, formData).subscribe({
       next: (response) => {
         this.successMessage = `Книга успешно загружена с ID ${response.book_id}`;
-        this.title = '';
-        this.description = '';
-        this.coverFile = undefined!;
-        this.selectedGenres = [];
+        this.resetForm();
       },
       error: (err) => {
         this.errorMessage = err.error?.error || 'Ошибка при загрузке книги';
       },
     });
+  }
+
+  resetForm(): void {
+    this.title = '';
+    this.description = '';
+    this.coverFile = undefined!;
+    this.selectedGenres = [];
+    const input = document.getElementById('cover') as HTMLInputElement;
+    if (input) input.value = '';
   }
 }

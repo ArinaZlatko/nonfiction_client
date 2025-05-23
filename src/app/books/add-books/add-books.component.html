@@ -3,10 +3,12 @@
   enctype="multipart/form-data"
   class="form-container"
 >
-  <h2 class="text-xl font-semibold mb-4">Добавить книгу</h2>
+  <h2 class="form-title">Добавить книгу</h2>
 
   <div>
-    <label for="title" class="form-label">Название книги:</label>
+    <label for="title" class="block text-sm font-medium text-gray-700 mb-1">
+      Название книги
+    </label>
     <input
       id="title"
       type="text"
@@ -18,48 +20,63 @@
   </div>
 
   <div>
-    <label for="description" class="form-label">Описание:</label>
+    <label
+      for="description"
+      class="block text-sm font-medium text-gray-700 mb-1"
+    >
+      Описание
+    </label>
     <textarea
       id="description"
       [(ngModel)]="description"
       name="description"
       required
+      rows="4"
       class="form-input"
     ></textarea>
   </div>
 
   <div>
-    <label class="form-label">Жанры (выберите хотя бы один):</label>
-    <div *ngFor="let genre of genres" class="form-checkbox">
-      <input
-        type="checkbox"
-        [id]="'genre-' + genre.id"
-        [value]="genre.id"
-        (change)="onGenreChange(genre.id, $event)"
-      />
-      <label [for]="'genre-' + genre.id">{{ genre.name }}</label>
-    </div>
+    <label for="genres" class="block text-sm font-medium text-gray-700 mb-1">
+      Жанры
+    </label>
+    <ng-select
+      [items]="genres"
+      bindLabel="name"
+      bindValue="id"
+      [(ngModel)]="selectedGenres"
+      [multiple]="true"
+      [closeOnSelect]="false"
+      [searchable]="true"
+      [hideSelected]="true"
+      name="genres"
+      placeholder="Выберите жанры..."
+      class="form-input"
+    >
+    </ng-select>
   </div>
 
   <div>
-    <label for="cover" class="form-label">Обложка:</label>
+    <label for="cover" class="block text-sm font-medium text-gray-700 mb-1">
+      Обложка
+    </label>
     <input
       id="cover"
       type="file"
       (change)="onFileChange($event)"
       accept="image/*"
       required
-      class="form-input bg-white"
+      class="form-input"
     />
   </div>
 
   <button type="submit" class="form-button">Добавить книгу</button>
 
-  <div *ngIf="successMessage" class="form-success text-green-600 mt-2">
+  <div *ngIf="successMessage" class="text-green-600 text-sm mt-2 text-center">
     {{ successMessage }}
   </div>
 
-  <div *ngIf="errorMessage" class="form-error text-red-600 mt-2">
+  <div *ngIf="errorMessage" class="form-error text-center">
     {{ errorMessage }}
   </div>
 </form>
