@@ -3,8 +3,9 @@ import { AuthService } from '../auth.service';
 import { RegisterData } from '../auth.model';
 
 @Component({
-  selector: 'app-register',
-  templateUrl: './register.component.html'
+    selector: 'app-register',
+    templateUrl: './register.component.html',
+    standalone: false
 })
 export class RegisterComponent {
   form: RegisterData = {

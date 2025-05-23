@@ -3,8 +3,9 @@ import { HttpClient } from '@angular/common/http';
 import { API_BASE_URL } from '../../core/api.config';
 
 @Component({
-  selector: 'app-add-book',
-  templateUrl: './add-books.component.html',
+    selector: 'app-add-book',
+    templateUrl: './add-books.component.html',
+    standalone: false
 })
 export class AddBooksComponent implements OnInit {
   title = '';

@@ -3,8 +3,9 @@ import { AuthService } from '../auth.service';
 import { LoginData } from '../auth.model';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html'
+    selector: 'app-login',
+    templateUrl: './login.component.html',
+    standalone: false
 })
 export class LoginComponent {
   form: LoginData = {
