@@ -7,7 +7,7 @@ export const BOOKS_ROUTES: Routes = [
   { path: 'add', component: AddBookComponent },
   { path: 'get', component: GetBooksComponent },
   {
-    path: ':id/chapters',
+    path: ':bookId/chapters',
     loadChildren: () =>
       import('./chapters/chapters.routes').then((m) => m.CHAPTERS_ROUTES),
   },

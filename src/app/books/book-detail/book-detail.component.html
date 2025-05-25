@@ -26,7 +26,12 @@
     <h2 class="text-lg font-semibold mb-2">Главы:</h2>
     <ol class="list-decimal pl-6">
       <li *ngFor="let chapter of book.chapters">
-        {{ chapter.title }}
+        <a
+          class="text-blue-600 hover:underline"
+          [routerLink]="['/books', book.id, 'chapters', chapter.id]"
+        >
+          {{ chapter.title }}
+        </a>
       </li>
     </ol>
   </div>
