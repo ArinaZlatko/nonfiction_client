@@ -5,6 +5,12 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
+interface ChapterImage {
+  file: File | null;
+  caption: string;
+  order: number;
+}
+
 @Component({
   standalone: true,
   selector: 'app-add-chapter',
@@ -16,7 +22,7 @@ export class AddChapterComponent implements OnInit {
   bookId!: number;
   title = '';
   content = '';
-  chapterImages: File[] = [];
+  images: ChapterImage[] = [];
 
   errorMessage = '';
   successMessage = '';
@@ -32,9 +38,15 @@ export class AddChapterComponent implements OnInit {
     }
   }
 
-  onFileChange(event: Event): void {
+  addImageInput(): void {
+    const order = this.images.length + 1;
+    this.images.push({ file: null, caption: '', order });
+  }
+
+  onImageChange(event: Event, index: number): void {
     const input = event.target as HTMLInputElement;
-    this.chapterImages = input.files ? Array.from(input.files) : [];
+    const file = input.files && input.files[0] ? input.files[0] : null;
+    this.images[index].file = file;
   }
 
   onSubmit(event: Event): void {
@@ -47,8 +59,12 @@ export class AddChapterComponent implements OnInit {
     formData.append('title', this.title);
     formData.append('content', this.content);
 
-    this.chapterImages.forEach((file) => {
-      formData.append('images', file, file.name);
+    this.images.forEach((img) => {
+      if (img.file) {
+        formData.append('images', img.file, img.file.name);
+        formData.append('captions', img.caption);
+        formData.append('orders', img.order.toString());
+      }
     });
 
     this.http
@@ -67,9 +83,6 @@ export class AddChapterComponent implements OnInit {
   resetForm(): void {
     this.title = '';
     this.content = '';
-    this.chapterImages = [];
-
-    const fileInput = document.getElementById('images') as HTMLInputElement;
-    if (fileInput) fileInput.value = '';
+    this.images = [];
   }
 }

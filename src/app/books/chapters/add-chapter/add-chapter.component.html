@@ -29,19 +29,31 @@
     ></textarea>
   </div>
 
-  <div>
-    <label for="images">Изображения</label>
+  <hr class="my-4" />
+
+  <div *ngFor="let image of images; let i = index">
+    <label>Изображение {{ image.order }}</label>
     <input
-      id="images"
       type="file"
-      (change)="onFileChange($event)"
       accept="image/*"
-      multiple
+      (change)="onImageChange($event, i)"
+      class="form-input"
+    />
+
+    <label>Подпись</label>
+    <input
+      type="text"
+      [(ngModel)]="image.caption"
+      name="caption{{ i }}"
       class="form-input"
     />
   </div>
 
-  <button type="submit" class="form-button">Добавить главу</button>
+  <button type="button" (click)="addImageInput()" class="form-button mt-2">
+    + Добавить изображение
+  </button>
+
+  <button type="submit" class="form-button mt-4">Добавить главу</button>
 
   <div *ngIf="successMessage" class="text-green-600 mt-2">
     {{ successMessage }}
