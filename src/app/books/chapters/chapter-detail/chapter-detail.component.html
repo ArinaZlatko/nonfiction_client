@@ -1,16 +1,57 @@
-<ng-container *ngIf="chapter$ | async as chapter">
-  <h1 class="text-xl font-bold mb-4">{{ chapter.title }}</h1>
-  <div class="prose">
-    {{ chapter.content }}
+<div>
+  <div class="chapter-actions">
+    <button
+      (click)="showText.set(!showText())"
+      class="btn-toggle"
+      [disabled]="!showImages()"
+    >
+      {{ showText() ? "Скрыть текст" : "Показать текст" }}
+    </button>
+
+    <button
+      (click)="showImages.set(!showImages())"
+      class="btn-toggle"
+      [disabled]="!showText()"
+    >
+      {{ showImages() ? "Скрыть картинки" : "Показать картинки" }}
+    </button>
   </div>
 
-  <ng-container *ngIf="chapter.images && chapter.images.length > 0">
-    <h2 class="text-lg font-semibold mb-2 mt-6">Изображения:</h2>
-    <div class="grid grid-cols-2 gap-4">
-      <div *ngFor="let image of chapter.images">
-        <img [src]="image.image" [alt]="image.caption" class="rounded shadow" />
-        <p class="text-sm text-gray-600">{{ image.caption }}</p>
+  <ng-container *ngIf="chapter$ | async as chapter">
+    <div class="chapter-layout" [style.height]="calcAvailableHeight()">
+      <div
+        class="chapter-text"
+        *ngIf="showText()"
+        [style.width.%]="textWidth() * 100"
+      >
+        <h1 class="chapter-title">{{ chapter.title }}</h1>
+        <div class="chapter-content" [innerHTML]="chapter.content"></div>
+      </div>
+
+      <div
+        class="drag-handle"
+        (mousedown)="onDrag($event)"
+        *ngIf="showText() && showImages()"
+        title="Перетащи для изменения ширины"
+      ></div>
+
+      <div
+        class="chapter-images"
+        *ngIf="showImages() && (chapter.images?.length ?? 0) > 0"
+        [style.width.%]="imagesWidth() * 100"
+      >
+        <h2 class="text-lg font-semibold mb-2 mt-6">Изображения:</h2>
+        <div class="flex flex-col gap-6">
+          <div *ngFor="let image of chapter.images">
+            <img
+              [src]="image.image"
+              [alt]="image.caption"
+              class="rounded shadow max-w-full"
+            />
+            <p class="image-caption">{{ image.caption }}</p>
+          </div>
+        </div>
       </div>
     </div>
   </ng-container>
-</ng-container>
+</div>

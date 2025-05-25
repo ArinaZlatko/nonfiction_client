@@ -30,7 +30,7 @@ export class AddChapterComponent implements OnInit {
   constructor(private http: HttpClient, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
-    const id = this.route.snapshot.paramMap.get('id');
+    const id = this.route.snapshot.paramMap.get('bookId'); // <-- исправлено
     if (id) {
       this.bookId = +id;
     } else {
@@ -45,7 +45,7 @@ export class AddChapterComponent implements OnInit {
 
   onImageChange(event: Event, index: number): void {
     const input = event.target as HTMLInputElement;
-    const file = input.files && input.files[0] ? input.files[0] : null;
+    const file = input.files?.[0] || null;
     this.images[index].file = file;
   }
 
@@ -54,6 +54,11 @@ export class AddChapterComponent implements OnInit {
 
     this.errorMessage = '';
     this.successMessage = '';
+
+    if (!this.title || !this.content) {
+      this.errorMessage = 'Заполните название и содержание главы.';
+      return;
+    }
 
     const formData = new FormData();
     formData.append('title', this.title);
@@ -68,7 +73,7 @@ export class AddChapterComponent implements OnInit {
     });
 
     this.http
-      .post(`${API_BASE_URL}/books/${this.bookId}/chapter/upload`, formData)
+      .post(`${API_BASE_URL}/books/${this.bookId}/chapter/upload/`, formData)
       .subscribe({
         next: () => {
           this.successMessage = 'Глава успешно добавлена!';

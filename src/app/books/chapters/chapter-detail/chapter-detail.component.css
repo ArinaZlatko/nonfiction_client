@@ -1,0 +1,81 @@
+.chapter-layout {
+  display: flex;
+  min-height: 400px;
+  overflow: hidden;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+}
+
+.chapter-text,
+.chapter-images {
+  padding: 1.5rem;
+  overflow-y: auto;
+  height: 100%;
+}
+
+.chapter-images {
+  background-color: #f9fafb;
+}
+
+.chapter-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.chapter-content {
+  max-width: none;
+  font-family: Georgia, serif;
+  line-height: 1.6;
+}
+
+.drag-handle {
+  width: 6px;
+  cursor: col-resize;
+  background-color: #cbd5e1;
+  border-radius: 3px;
+  margin: 0 4px;
+  user-select: none;
+  transition: background-color 0.2s;
+}
+
+.drag-handle:hover {
+  background-color: #94a3b8;
+}
+
+.chapter-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+/* Мелкие и спокойные кнопки */
+.btn-toggle {
+  background: #e5e7eb;
+  color: #374151;
+  border: none;
+  padding: 0.35rem 0.75rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 0.875rem;
+  transition: background-color 0.3s;
+}
+
+.btn-toggle:hover {
+  background: #d1d5db;
+}
+
+.btn-toggle:disabled {
+  background-color: #f3f4f6;
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+
+.image-caption {
+  text-align: center;
+  color: #4b5563;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
