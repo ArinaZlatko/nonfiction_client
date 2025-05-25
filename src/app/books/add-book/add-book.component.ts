@@ -8,10 +8,10 @@ import { NgSelectModule } from '@ng-select/ng-select';
 @Component({
   standalone: true,
   selector: 'app-add-book',
-  templateUrl: './add-books.component.html',
+  templateUrl: './add-book.component.html',
   imports: [CommonModule, FormsModule, NgSelectModule],
 })
-export class AddBooksComponent implements OnInit {
+export class AddBookComponent implements OnInit {
   title = '';
   description = '';
   coverFile!: File;

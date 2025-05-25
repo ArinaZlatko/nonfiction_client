@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { API_BASE_URL } from '../../core/api.config';
+import { RouterModule } from '@angular/router';
 
 @Component({
   standalone: true,
   selector: 'app-get-books',
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './get-books.component.html',
   styleUrl: './get-books.component.css',
 })

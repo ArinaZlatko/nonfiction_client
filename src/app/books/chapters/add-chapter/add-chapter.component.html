@@ -1,0 +1,64 @@
+<form
+  (submit)="onSubmit($event)"
+  enctype="multipart/form-data"
+  class="form-container"
+>
+  <h2 class="form-title">Добавить главу</h2>
+
+  <div>
+    <label for="title">Название главы</label>
+    <input
+      id="title"
+      type="text"
+      [(ngModel)]="title"
+      name="title"
+      required
+      class="form-input"
+    />
+  </div>
+
+  <div>
+    <label for="content">Содержание главы</label>
+    <textarea
+      id="content"
+      [(ngModel)]="content"
+      name="content"
+      rows="16"
+      class="form-input w-full max-w-5xl"
+      placeholder="Введите содержание главы..."
+    ></textarea>
+  </div>
+
+  <hr class="my-4" />
+
+  <div *ngFor="let image of images; let i = index">
+    <label>Изображение {{ image.order }}</label>
+    <input
+      type="file"
+      accept="image/*"
+      (change)="onImageChange($event, i)"
+      class="form-input"
+    />
+
+    <label>Подпись</label>
+    <input
+      type="text"
+      [(ngModel)]="image.caption"
+      name="caption{{ i }}"
+      class="form-input"
+    />
+  </div>
+
+  <button type="button" (click)="addImageInput()" class="form-button mt-2">
+    + Добавить изображение
+  </button>
+
+  <button type="submit" class="form-button mt-4">Добавить главу</button>
+
+  <div *ngIf="successMessage" class="text-green-600 mt-2">
+    {{ successMessage }}
+  </div>
+  <div *ngIf="errorMessage" class="text-red-600 mt-2">
+    {{ errorMessage }}
+  </div>
+</form>

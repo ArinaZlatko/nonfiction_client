@@ -1,27 +1,26 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../auth/auth.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
-    selector: 'app-navbar',
-    templateUrl: './navbar.component.html',
-    standalone: false
+  standalone: true,
+  selector: 'app-navbar',
+  templateUrl: './navbar.component.html',
+  imports: [CommonModule, RouterModule],
 })
 export class NavbarComponent {
-  constructor(
-    public authService: AuthService,
-    private router: Router
-  ) {}
+  constructor(public authService: AuthService, private router: Router) {}
 
   logout() {
     this.authService.logout().subscribe({
       next: () => {
         this.router.navigate(['/auth/login']);
       },
-      error: err => {
+      error: (err) => {
         console.error('Ошибка при выходе', err);
         this.router.navigate(['/auth/login']);
-      }
+      },
     });
   }
 

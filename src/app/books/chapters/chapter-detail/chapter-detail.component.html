@@ -1,0 +1,16 @@
+<ng-container *ngIf="chapter$ | async as chapter">
+  <h1 class="text-xl font-bold mb-4">{{ chapter.title }}</h1>
+  <div class="prose">
+    {{ chapter.content }}
+  </div>
+
+  <ng-container *ngIf="chapter.images && chapter.images.length > 0">
+    <h2 class="text-lg font-semibold mb-2 mt-6">Изображения:</h2>
+    <div class="grid grid-cols-2 gap-4">
+      <div *ngFor="let image of chapter.images">
+        <img [src]="image.image" [alt]="image.caption" class="rounded shadow" />
+        <p class="text-sm text-gray-600">{{ image.caption }}</p>
+      </div>
+    </div>
+  </ng-container>
+</ng-container>

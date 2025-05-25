@@ -4,10 +4,13 @@
   <div *ngIf="books.length === 0 && !errorMessage" class="text-gray-500">
     Книг пока нет.
   </div>
-
   <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-    <div *ngFor="let book of books" class="border rounded shadow p-4 bg-white">
-      <div *ngIf="book.cover" class="mt-2">
+    <a
+      *ngFor="let book of books"
+      [routerLink]="['/books', book.id]"
+      class="block h-full border rounded shadow p-4 bg-white hover:shadow-lg transition-shadow duration-200"
+    >
+      <div *ngIf="book.cover" class="mb-2">
         <img
           [src]="BaseUrl + book.cover"
           alt="Обложка"
@@ -19,8 +22,7 @@
         Автор: {{ book.author.first_name | slice : 0 : 1 }}.
         {{ book.author.last_name | slice : 0 : 1 }}. {{ book.author.surname }}
       </div>
-
-      <div class="flex flex-wrap gap-2 mb-2">
+      <div class="flex flex-wrap gap-2">
         <span
           *ngFor="let genre of book.genres"
           class="bg-orange-100 text-orange-800 text-xs font-medium px-2 py-1 rounded"
@@ -28,6 +30,6 @@
           {{ genre.name }}
         </span>
       </div>
-    </div>
+    </a>
   </div>
 </div>

@@ -1,5 +1,11 @@
 import { Injectable } from '@angular/core';
-import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HttpErrorResponse } from '@angular/common/http';
+import {
+  HttpEvent,
+  HttpInterceptor,
+  HttpHandler,
+  HttpRequest,
+  HttpErrorResponse,
+} from '@angular/common/http';
 import { Observable, BehaviorSubject, throwError } from 'rxjs';
 import { catchError, filter, switchMap, take } from 'rxjs/operators';
 import { TokenService } from './token.service';
@@ -27,11 +33,14 @@ export class AuthInterceptor implements HttpInterceptor {
 
     return next.handle(authReq).pipe(
       catchError((error: HttpErrorResponse) => {
-        if (
-          error.status === 401 &&
-          !req.url.includes('/token/refresh') &&
-          this.tokenService.getRefreshToken()
-        ) {
+        if (error.status === 401 && !req.url.includes('/token/refresh')) {
+          const refreshToken = this.tokenService.getRefreshToken();
+          if (!refreshToken) {
+            this.tokenService.clearTokens();
+            this.router.navigate(['/login']);
+            return throwError(() => error);
+          }
+
           return this.handle401Error(req, next);
         }
 

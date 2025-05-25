@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { API_BASE_URL } from '../core/api.config';
 import { TokenResponse } from './auth.model';
-import { Observable, throwError } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 import { catchError, switchMap } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
@@ -14,6 +14,12 @@ export class TokenService {
   saveTokens(res: TokenResponse) {
     localStorage.setItem('access_token', res.access);
     localStorage.setItem('refresh_token', res.refresh);
+
+    const exp = this.decodeJwt(res.access)?.exp;
+    if (exp) {
+      localStorage.setItem('refresh_at', exp.toString());
+    }
+
     this.scheduleRefresh(res.access);
   }
 
@@ -21,6 +27,7 @@ export class TokenService {
     if (this.refreshTimeout) clearTimeout(this.refreshTimeout);
     localStorage.removeItem('access_token');
     localStorage.removeItem('refresh_token');
+    localStorage.removeItem('refresh_at');
   }
 
   getAccessToken(): string | null {
@@ -47,7 +54,7 @@ export class TokenService {
       .pipe(
         switchMap((res) => {
           this.saveTokens(res);
-          return [res];
+          return of(res);
         }),
         catchError((err) => {
           this.clearTokens();
@@ -69,9 +76,7 @@ export class TokenService {
     this.refreshTimeout = setTimeout(() => {
       this.refreshToken().subscribe({
         next: () => {},
-        error: () => {
-          this.clearTokens();
-        },
+        error: () => this.clearTokens(),
       });
     }, expiresInMs);
   }
@@ -83,5 +88,11 @@ export class TokenService {
     } catch (e) {
       return null;
     }
+  }
+
+  isTokenExpired(token: string): boolean {
+    const payload = this.decodeJwt(token);
+    const exp = payload?.exp;
+    return !exp || Date.now() > exp * 1000;
   }
 }
