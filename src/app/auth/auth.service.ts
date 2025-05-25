@@ -12,8 +12,11 @@ export class AuthService {
 
   constructor(private http: HttpClient, private tokenService: TokenService) {}
 
-  register(data: RegisterData): Observable<any> {
-    return this.http.post(`${this.apiUrl}/register/`, data);
+  register(data: RegisterData): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(
+      `${this.apiUrl}/register/`,
+      data
+    );
   }
 
   login(data: LoginData): Observable<TokenResponse> {
@@ -24,13 +27,16 @@ export class AuthService {
     );
   }
 
-  logout(): Observable<any> {
+  logout(): Observable<{ message: string }> {
     const refresh = this.tokenService.getRefreshToken();
     this.tokenService.clearTokens();
-    return this.http.post(`${this.apiUrl}/logout/`, { refresh });
+    return this.http.post<{ message: string }>(`${this.apiUrl}/logout/`, {
+      refresh,
+    });
   }
 
   isAuthenticated(): boolean {
-    return this.tokenService.hasAccessToken();
+    const token = this.tokenService.getAccessToken();
+    return !!token && !this.tokenService.isTokenExpired(token);
   }
 }
