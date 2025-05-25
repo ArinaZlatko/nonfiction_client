@@ -3,9 +3,7 @@
 
   <div *ngIf="book.cover" class="mb-4">
     <img
-      [src]="
-        book.cover.startsWith('http') ? book.cover : BaseUrl + book.cover
-      "
+      [src]="book.cover.startsWith('http') ? book.cover : BaseUrl + book.cover"
       alt="Обложка"
       class="w-full max-h-64 object-cover rounded"
     />
@@ -28,7 +26,7 @@
     <h2 class="text-lg font-semibold mb-2">Главы:</h2>
     <ol class="list-decimal pl-6">
       <li *ngFor="let chapter of book.chapters">
-        {{ chapter.order }}. {{ chapter.title }}
+        {{ chapter.title }}
       </li>
     </ol>
   </div>
@@ -36,6 +34,15 @@
   <p *ngIf="book.chapters?.length === 0" class="text-gray-500 italic">
     Главы пока не добавлены.
   </p>
+
+  <div class="mt-6 text-center" *ngIf="bookId">
+    <a
+      [routerLink]="['/books', bookId, 'chapters', 'add']"
+      class="inline-block font-semibold py-2 px-4 rounded transition"
+    >
+      ➕ Добавить главу
+    </a>
+  </div>
 </div>
 
 <p *ngIf="errorMessage" class="text-red-600 text-center mt-4">

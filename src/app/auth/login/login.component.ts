@@ -1,16 +1,19 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../auth.service';
 import { LoginData } from '../auth.model';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
-    selector: 'app-login',
-    templateUrl: './login.component.html',
-    standalone: false
+  standalone: true,
+  selector: 'app-login',
+  templateUrl: './login.component.html',
+  imports: [CommonModule, FormsModule]
 })
 export class LoginComponent {
   form: LoginData = {
     username: '',
-    password: ''
+    password: '',
   };
 
   errorMessage: string = '';
@@ -27,7 +30,7 @@ export class LoginComponent {
       error: (err) => {
         this.errorMessage = 'Неверные данные для входа';
         console.error(err);
-      }
+      },
     });
   }
 }
