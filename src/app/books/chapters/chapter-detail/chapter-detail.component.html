@@ -18,6 +18,14 @@
   </div>
 
   <ng-container *ngIf="chapter$ | async as chapter">
+    <div class="mb-1 text-start">
+      <a
+        [routerLink]="['/books', bookId, 'chapters', chapter.id, 'edit']"
+        class="text-sm text-gray-400 hover:text-gray-600 transition"
+      >
+        ✏️ Редактировать
+      </a>
+    </div>
     <div class="chapter-layout" [style.height]="calcAvailableHeight()">
       <div
         class="chapter-text"

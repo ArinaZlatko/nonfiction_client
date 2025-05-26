@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { API_BASE_URL } from 'src/app/core/api.config';
+import { API_BASE_URL, BASE_URL } from 'src/app/core/api.config';
 import { CommonModule } from '@angular/common';
 
 
@@ -16,7 +16,7 @@ export class BookDetailComponent implements OnInit {
   book: any;
   bookId!: number;
   errorMessage: string | null = null;
-  BaseUrl = API_BASE_URL.slice(0, -4);
+  BaseUrl = BASE_URL;
 
   constructor(private route: ActivatedRoute, private http: HttpClient) {}
 
