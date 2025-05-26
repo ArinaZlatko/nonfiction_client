@@ -32,7 +32,7 @@ export class ChapterFormComponent {
   addImageInput(): void {
     const newImages = [
       ...this.images,
-      { file: null, caption: '', order: this.images.length + 1, editing: true },
+      { file: null, caption: '', order: this.images.length + 1 },
     ];
     this.imagesChange.emit(newImages);
   }
@@ -55,5 +55,4 @@ export class ChapterFormComponent {
   toggleEditing(index: number): void {
     this.editingFlags[index] = !this.editingFlags[index];
   }
-  
 }

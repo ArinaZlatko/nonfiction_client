@@ -78,11 +78,13 @@ export class EditChapterComponent implements OnInit {
     formData.append('content', content);
 
     images.forEach((img) => {
-      if (img.file) {
+      if (img.file && !img.id) {
+        // Новое изображение
         formData.append('images', img.file, img.file.name);
         formData.append('captions', img.caption);
         formData.append('orders', img.order.toString());
       } else if (img.id) {
+        // Существующее изображение (только caption/order)
         formData.append('existing_image_ids', img.id.toString());
         formData.append('existing_captions', img.caption);
         formData.append('existing_orders', img.order.toString());
