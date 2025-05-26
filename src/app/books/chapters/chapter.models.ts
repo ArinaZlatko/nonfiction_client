@@ -1,9 +1,9 @@
 export interface ChapterImage {
   id?: number;
-  file: File | null;
+  url?: string;
+  file?: File | null;
   caption: string;
   order: number;
-  url?: string;
 }
 
 export interface Chapter {

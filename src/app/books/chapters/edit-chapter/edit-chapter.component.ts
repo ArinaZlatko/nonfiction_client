@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { API_BASE_URL, BASE_URL } from '../../../core/api.config';
 import { ChapterFormComponent } from '../chapter-form/chapter-form.component';
 import { CommonModule } from '@angular/common';
@@ -10,7 +10,7 @@ import { Chapter } from '../chapter.models';
 @Component({
   selector: 'app-edit-chapter',
   standalone: true,
-  imports: [CommonModule, FormsModule, ChapterFormComponent],
+  imports: [CommonModule, FormsModule, ChapterFormComponent, RouterLink],
   templateUrl: './edit-chapter.component.html',
 })
 export class EditChapterComponent implements OnInit {
@@ -25,6 +25,7 @@ export class EditChapterComponent implements OnInit {
 
   errorMessage = '';
   successMessage = '';
+  deletedImageIds: number[] = [];
 
   constructor(private route: ActivatedRoute, private http: HttpClient) {}
 
@@ -88,6 +89,10 @@ export class EditChapterComponent implements OnInit {
       }
     });
 
+    this.deletedImageIds.forEach((id) => {
+      formData.append('deleted_image_ids', id.toString());
+    });
+
     this.http
       .put(
         `${API_BASE_URL}/books/${this.bookId}/chapter/${this.chapterId}/edit/`,
@@ -101,5 +106,13 @@ export class EditChapterComponent implements OnInit {
           this.errorMessage = 'Ошибка при обновлении главы';
         },
       });
+  }
+
+  onDeleteImage(index: number): void {
+    const image = this.chapter.images[index];
+    if (image.id) {
+      this.deletedImageIds.push(image.id);
+    }
+    this.chapter.images.splice(index, 1);
   }
 }

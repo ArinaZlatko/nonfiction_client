@@ -3,7 +3,22 @@
   class="form-container"
   enctype="multipart/form-data"
 >
-  <h2 class="form-title">Редактировать главу</h2>
+  <div class="flex justify-between items-center mb-4">
+    <a
+      [routerLink]="['/books', bookId, 'chapters', chapterId]"
+      class="text-sm text-gray-500 hover:text-gray-700 transition inline-flex items-center"
+    >
+      Вернуться к чтению главы
+    </a>
+
+    <a
+      [routerLink]="['/books', bookId, 'chapters', chapterId, 'delete']"
+      class="text-sm text-red-400 hover:text-red-600 transition"
+    >
+      Удалить главу
+    </a>
+  </div>
+  <h2 class="form-title mb-4">Редактирование главы</h2>
 
   <app-chapter-form
     [title]="chapter.title"

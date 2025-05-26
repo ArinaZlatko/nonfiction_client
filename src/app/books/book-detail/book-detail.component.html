@@ -1,4 +1,13 @@
 <div class="max-w-4xl mx-auto px-4 py-6" *ngIf="book">
+  <div class="mb-4">
+    <a
+      routerLink="/books/get"
+      class="text-sm text-gray-500 hover:text-gray-700 transition inline-flex items-center"
+    >
+      Вернуться ко всем книгам
+    </a>
+  </div>
+
   <h1 class="text-2xl font-bold mb-4">{{ book.title }}</h1>
 
   <div *ngIf="book.cover" class="mb-4">
