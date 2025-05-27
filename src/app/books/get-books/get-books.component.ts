@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
-import { API_BASE_URL } from '../../core/api.config';
+import { API_BASE_URL, BASE_URL } from '../../core/api.config';
 import { RouterModule } from '@angular/router';
 
 @Component({
@@ -14,7 +14,7 @@ import { RouterModule } from '@angular/router';
 export class GetBooksComponent implements OnInit {
   books: any[] = [];
   errorMessage = '';
-  BaseUrl = API_BASE_URL.slice(0, -4);
+  BaseUrl = BASE_URL;
 
   constructor(private http: HttpClient) {}
 

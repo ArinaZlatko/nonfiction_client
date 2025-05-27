@@ -1,74 +1,85 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { API_BASE_URL } from '../../../core/api.config';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
-
-interface ChapterImage {
-  file: File | null;
-  caption: string;
-  order: number;
-}
+import { Chapter } from '../chapter.models';
 
 @Component({
   standalone: true,
   selector: 'app-add-chapter',
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './add-chapter.component.html',
-  styleUrls: ['./add-chapter.component.css'],
-  imports: [CommonModule, FormsModule],
 })
 export class AddChapterComponent implements OnInit {
   bookId!: number;
-  title = '';
-  content = '';
-  images: ChapterImage[] = [];
-
-  errorMessage = '';
+  chapter: Chapter = { title: '', content: '', images: [] };
+  editingFlags: boolean[] = [];
   successMessage = '';
+  errorMessage = '';
 
   constructor(private http: HttpClient, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
-    const id = this.route.snapshot.paramMap.get('bookId'); // <-- исправлено
-    if (id) {
-      this.bookId = +id;
-    } else {
-      this.errorMessage = 'ID книги не найден';
-    }
+    const id = this.route.snapshot.paramMap.get('bookId');
+    if (id) this.bookId = +id;
+    else this.errorMessage = 'ID книги не найден';
   }
 
-  addImageInput(): void {
-    const order = this.images.length + 1;
-    this.images.push({ file: null, caption: '', order });
+  addImage(): void {
+    this.chapter.images.push({
+      file: null,
+      caption: '',
+      order: this.chapter.images.length + 1,
+    });
+    this.editingFlags.push(true);
   }
 
   onImageChange(event: Event, index: number): void {
     const input = event.target as HTMLInputElement;
     const file = input.files?.[0] || null;
-    this.images[index].file = file;
+    if (file) {
+      this.chapter.images[index].file = file;
+      this.chapter.images[index].image = URL.createObjectURL(file);
+    }
   }
 
-  onSubmit(event: Event): void {
-    event.preventDefault();
+  updateOrders(): void {
+    this.chapter.images.forEach((img, i) => (img.order = i + 1));
+  }
 
-    this.errorMessage = '';
-    this.successMessage = '';
+  onDeleteImage(index: number): void {
+    this.chapter.images.splice(index, 1);
+    this.editingFlags.splice(index, 1);
+    this.chapter.images.forEach((img, i) => (img.order = i + 1));
+  }
 
-    if (!this.title || !this.content) {
+  toggleEditing(index: number): void {
+    this.editingFlags[index] = !this.editingFlags[index];
+  }
+
+  onSubmit(): void {
+    const { title, content, images } = this.chapter;
+
+    if (!title || !content) {
       this.errorMessage = 'Заполните название и содержание главы.';
       return;
     }
 
-    const formData = new FormData();
-    formData.append('title', this.title);
-    formData.append('content', this.content);
+    images.forEach((img, index) => {
+      img.order = index + 1;
+    });
 
-    this.images.forEach((img) => {
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('content', content);
+
+    images.forEach((img) => {
       if (img.file) {
-        formData.append('images', img.file, img.file.name);
-        formData.append('captions', img.caption);
-        formData.append('orders', img.order.toString());
+        formData.append('images', img.file, img.file.name); // <-- исправлено
+        formData.append('captions', img.caption); // <-- исправлено
+        formData.append('orders', img.order.toString()); // <-- исправлено
       }
     });
 
@@ -86,8 +97,7 @@ export class AddChapterComponent implements OnInit {
   }
 
   resetForm(): void {
-    this.title = '';
-    this.content = '';
-    this.images = [];
+    this.chapter = { title: '', content: '', images: [] };
+    this.editingFlags = [];
   }
 }

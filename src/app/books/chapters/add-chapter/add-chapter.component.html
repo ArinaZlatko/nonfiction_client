@@ -1,19 +1,24 @@
 <form
-  (submit)="onSubmit($event)"
-  enctype="multipart/form-data"
+  (submit)="onSubmit(); $event.preventDefault()"
   class="form-container"
+  enctype="multipart/form-data"
 >
+  <a
+    [routerLink]="['/books', bookId]"
+    class="text-sm text-gray-500 hover:text-gray-700"
+    >Вернуться к книге</a
+  >
   <h2 class="form-title">Добавить главу</h2>
 
   <div>
     <label for="title">Название главы</label>
     <input
       id="title"
-      type="text"
-      [(ngModel)]="title"
       name="title"
-      required
+      type="text"
       class="form-input"
+      [(ngModel)]="chapter.title"
+      required
     />
   </div>
 
@@ -21,24 +26,44 @@
     <label for="content">Содержание главы</label>
     <textarea
       id="content"
-      [(ngModel)]="content"
       name="content"
       rows="16"
       class="form-input w-full max-w-5xl"
+      [(ngModel)]="chapter.content"
       placeholder="Введите содержание главы..."
     ></textarea>
   </div>
 
   <hr class="my-4" />
 
-  <div *ngFor="let image of images; let i = index">
-    <label>Изображение {{ image.order }}</label>
-    <input
-      type="file"
-      accept="image/*"
-      (change)="onImageChange($event, i)"
-      class="form-input"
-    />
+  <div *ngFor="let image of chapter.images; let i = index" class="mb-4">
+    <div class="flex justify-between items-center mb-1">
+      <span class="text-black">Изображение {{ image.order }}</span>
+      <button
+        type="button"
+        (click)="onDeleteImage(i)"
+        class="text-sm text-red-500 hover:text-red-700 ml-4"
+      >
+        Удалить изображение
+      </button>
+    </div>
+
+    <div *ngIf="image.image && !editingFlags[i]" class="mb-2">
+      <img
+        [src]="image.image"
+        class="w-48 h-auto rounded shadow"
+        alt="Preview"
+      />
+    </div>
+
+    <div *ngIf="editingFlags[i]" class="mt-2">
+      <input
+        type="file"
+        accept="image/*"
+        (change)="onImageChange($event, i)"
+        class="form-input"
+      />
+    </div>
 
     <label>Подпись</label>
     <input
@@ -49,16 +74,13 @@
     />
   </div>
 
-  <button type="button" (click)="addImageInput()" class="form-button mt-2">
+  <button type="button" (click)="addImage()" class="form-button mt-2">
     + Добавить изображение
   </button>
-
-  <button type="submit" class="form-button mt-4">Добавить главу</button>
+  <button type="submit" class="form-button mt-4">Сохранить главу</button>
 
   <div *ngIf="successMessage" class="text-green-600 mt-2">
     {{ successMessage }}
   </div>
-  <div *ngIf="errorMessage" class="text-red-600 mt-2">
-    {{ errorMessage }}
-  </div>
+  <div *ngIf="errorMessage" class="text-red-600 mt-2">{{ errorMessage }}</div>
 </form>

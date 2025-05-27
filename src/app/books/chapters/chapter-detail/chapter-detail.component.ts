@@ -1,5 +1,5 @@
 import { Component, inject, signal, computed } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ChapterService } from '../chapter.service';
 import { switchMap, map } from 'rxjs';
@@ -7,7 +7,7 @@ import { switchMap, map } from 'rxjs';
 @Component({
   selector: 'app-chapter-detail',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './chapter-detail.component.html',
   styleUrls: ['./chapter-detail.component.css'],
 })
@@ -15,6 +15,8 @@ export class ChapterDetailComponent {
   private route = inject(ActivatedRoute);
   private chapterService = inject(ChapterService);
 
+  bookId = Number(this.route.snapshot.paramMap.get('bookId'));
+  
   chapter$ = this.route.paramMap.pipe(
     switchMap((params) => {
       const bookId = params.get('bookId')!;
@@ -32,15 +34,19 @@ export class ChapterDetailComponent {
 
   // Вычисление ширин
   textWidth = computed(() => {
-    return this.showText() && !this.showImages() ? 1 :
-           this.showText() && this.showImages() ? this._textWidth() :
-           0;
+    return this.showText() && !this.showImages()
+      ? 1
+      : this.showText() && this.showImages()
+      ? this._textWidth()
+      : 0;
   });
 
   imagesWidth = computed(() => {
-    return this.showImages() && !this.showText() ? 1 :
-           this.showText() && this.showImages() ? 1 - this._textWidth() :
-           0;
+    return this.showImages() && !this.showText()
+      ? 1
+      : this.showText() && this.showImages()
+      ? 1 - this._textWidth()
+      : 0;
   });
 
   // Внутреннее состояние ширины

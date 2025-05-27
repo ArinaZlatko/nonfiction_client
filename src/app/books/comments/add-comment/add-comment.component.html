@@ -1,0 +1,40 @@
+<div class="mt-1 max-w-xl mx-auto">
+  <form (ngSubmit)="onSubmit()" class="space-y-3 text-sm mb-10">
+    <h2 class="form-title text-base font-semibold">Оставить комментарий</h2>
+
+    <div *ngIf="errorMessage" class="form-error">{{ errorMessage }}</div>
+    <div *ngIf="successMessage" class="text-green-600 text-xs mt-1">
+      {{ successMessage }}
+    </div>
+
+    <div>
+      <label for="content" class="block mb-1 font-medium">Комментарий:</label>
+      <textarea
+        id="content"
+        [(ngModel)]="content"
+        name="content"
+        rows="3"
+        class="form-input text-sm p-1 w-full"
+      ></textarea>
+    </div>
+
+    <div>
+      <label for="rating" class="block mb-1 font-medium">Оценка (1–5):</label>
+      <select
+        id="rating"
+        [(ngModel)]="rating"
+        name="rating"
+        class="form-select text-sm p-1 w-full"
+      >
+        <option [ngValue]="null">Выберите оценку</option>
+        <option *ngFor="let r of [1, 2, 3, 4, 5]" [value]="r">{{ r }}</option>
+      </select>
+    </div>
+
+    <div class="mt-3">
+      <button type="submit" class="form-button text-sm py-1 px-3">
+        Оставить комментарий
+      </button>
+    </div>
+  </form>
+</div>

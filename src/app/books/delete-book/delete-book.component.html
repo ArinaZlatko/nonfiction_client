@@ -1,0 +1,22 @@
+<div class="delete-container">
+  <h2 class="delete-title">Удалить книгу?</h2>
+
+  <p class="delete-description">
+    Вы уверены, что хотите удалить эту книгу? Это действие нельзя отменить.
+  </p>
+
+  <div class="delete-buttons">
+    <button
+      class="delete-confirm"
+      (click)="confirmDelete()"
+      [disabled]="isDeleting"
+    >
+      {{ isDeleting ? "Удаление..." : "Удалить" }}
+    </button>
+    <button class="delete-cancel" (click)="cancel()" [disabled]="isDeleting">
+      Отмена
+    </button>
+  </div>
+
+  <div *ngIf="errorMessage" class="delete-error">{{ errorMessage }}</div>
+</div>
