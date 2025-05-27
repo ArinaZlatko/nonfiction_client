@@ -68,3 +68,69 @@
 <p *ngIf="errorMessage" class="text-red-600 text-center mt-4">
   {{ errorMessage }}
 </p>
+
+<!-- Форма комментария — только если пользователь ещё не оставил комментарий -->
+<div class="mt-1 form-container" *ngIf="!userComment">
+  <app-add-comment
+    [bookId]="bookId"
+    (commentAdded)="onCommentAdded()"
+  ></app-add-comment>
+
+  <!-- Комментарии -->
+  <div class="w-[80%] mx-auto">
+    <h2
+      class="text-xl font-semibold mb-6 border-b pb-2 border-gray-300 text-gray-800"
+    >
+      Комментарии
+    </h2>
+
+    <p
+      *ngIf="!userComment && otherComments.length === 0"
+      class="text-gray-500 italic text-sm"
+    >
+      Комментариев пока нет.
+    </p>
+
+    <div
+      *ngIf="userComment"
+      class="mb-6 border border-gray-300 rounded bg-white shadow-md p-4 relative"
+    >
+      <div class="text-base font-semibold text-gray-900 mb-1 pl-2">
+        {{ userComment.user }}
+      </div>
+
+      <a
+        [routerLink]="['/books', bookId, 'edit-comment']"
+        class="absolute top-2 right-3 text-sm text-gray-500 hover:text-gray-700 transition"
+      >
+        Редактировать
+      </a>
+
+      <p class="text-gray-800 mb-2 whitespace-pre-line text-sm leading-relaxed">
+        {{ userComment.content }}
+      </p>
+
+      <div class="flex justify-between items-center text-xs text-gray-600 mt-2">
+        <span>Оценка: {{ userComment.rating }} / 5</span>
+        <span>{{ userComment.created_at | date : "dd.MM.yyyy HH:mm" }}</span>
+      </div>
+    </div>
+
+    <!-- Остальные комментарии -->
+    <div
+      *ngFor="let comment of otherComments"
+      class="mb-6 border border-gray-300 rounded bg-gray-50 p-4 shadow-sm"
+    >
+      <div class="text-base font-semibold text-gray-900 mb-1">
+        {{ comment.user }}
+      </div>
+      <p class="text-gray-800 mb-2 whitespace-pre-line text-sm leading-relaxed">
+        {{ comment.content }}
+      </p>
+      <div class="flex justify-between items-center text-xs text-gray-600 mt-2">
+        <span>Оценка: {{ comment.rating }} / 5</span>
+        <span>{{ comment.created_at | date : "dd.MM.yyyy HH:mm" }}</span>
+      </div>
+    </div>
+  </div>
+</div>
