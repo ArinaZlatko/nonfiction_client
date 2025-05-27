@@ -3,7 +3,22 @@
   enctype="multipart/form-data"
   class="form-container"
 >
-  <h2 class="form-title">Добавить книгу</h2>
+  <div class="flex justify-between items-center mb-4">
+    <a
+      [routerLink]="['/books', bookId]"
+      class="text-sm text-gray-500 hover:text-gray-700 transition inline-flex items-center"
+    >
+      Вернуться к книге
+    </a>
+    <a
+      [routerLink]="['/books', bookId, 'delete']"
+      class="text-sm text-red-400 hover:text-red-600"
+    >
+      Удалить книгу
+    </a>
+  </div>
+
+  <h2 class="form-title">Редактировать книгу</h2>
 
   <div>
     <label for="title" class="block text-sm font-medium text-gray-700 mb-1">
@@ -56,31 +71,10 @@
     </ng-select>
   </div>
 
-  <div>
-    <label for="cover" class="block text-sm font-medium text-gray-700 mb-1">
-      Обложка
-    </label>
-    <input
-      id="cover"
-      type="file"
-      (change)="onFileChange($event)"
-      accept="image/*"
-      required
-      class="form-input"
-    />
-  </div>
+  <button type="submit" class="form-button">Сохранить изменения</button>
 
-  <button type="submit" class="form-button">Добавить книгу</button>
-
-  <div *ngIf="successMessage" class="text-green-600 text-center mt-4">
+  <div *ngIf="successMessage" class="text-green-600 text-sm mt-2 text-center">
     {{ successMessage }}
-    <a
-      *ngIf="bookId"
-      [routerLink]="['/books', bookId]"
-      class="underline ml-1"
-    >
-      Хотите просмотреть её?
-    </a>
   </div>
 
   <div *ngIf="errorMessage" class="form-error text-center">

@@ -38,14 +38,7 @@
 
   <div *ngFor="let image of chapter.images; let i = index" class="mb-4">
     <div class="flex justify-between items-center mb-1">
-      <a
-        type="button"
-        (click)="toggleEditing(i)"
-        class="text-sm text-gray-400 hover:text-gray-600 cursor-pointer"
-      >
-        Редактировать
-        <span class="text-black">Изображение {{ image.order }}</span>
-      </a>
+      <span class="text-black">Изображение {{ image.order }}</span>
       <button
         type="button"
         (click)="onDeleteImage(i)"
@@ -56,7 +49,11 @@
     </div>
 
     <div *ngIf="image.image && !editingFlags[i]" class="mb-2">
-      <img [src]="image.image" class="w-48 h-auto rounded shadow" alt="Preview" />
+      <img
+        [src]="image.image"
+        class="w-48 h-auto rounded shadow"
+        alt="Preview"
+      />
     </div>
 
     <div *ngIf="editingFlags[i]" class="mt-2">

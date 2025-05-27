@@ -4,12 +4,13 @@ import { API_BASE_URL } from '../../core/api.config';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { RouterModule } from '@angular/router';
 
 @Component({
   standalone: true,
   selector: 'app-add-book',
   templateUrl: './add-book.component.html',
-  imports: [CommonModule, FormsModule, NgSelectModule],
+  imports: [CommonModule, FormsModule, NgSelectModule, RouterModule],
 })
 export class AddBookComponent implements OnInit {
   title = '';
@@ -19,6 +20,7 @@ export class AddBookComponent implements OnInit {
   genres: any[] = [];
   selectedGenres: number[] = [];
 
+  bookId: string | null = null;
   errorMessage = '';
   successMessage = '';
 
@@ -62,7 +64,8 @@ export class AddBookComponent implements OnInit {
 
     this.http.post<any>(`${API_BASE_URL}/books/upload/`, formData).subscribe({
       next: (response) => {
-        this.successMessage = `Книга успешно загружена с ID ${response.book_id}`;
+        this.bookId = response.book_id;
+        this.successMessage = 'Книга успешно загружена!';
         this.resetForm();
       },
       error: (err) => {
