@@ -1,6 +1,6 @@
 export interface ChapterImage {
   id?: number;
-  url?: string;
+  image?: string;
   file?: File | null;
   caption: string;
   order: number;

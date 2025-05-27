@@ -1,4 +1,10 @@
 <div>
+  <a
+    [routerLink]="['/books', bookId]"
+    class="text-sm text-gray-500 hover:text-gray-700 transition inline-flex items-center"
+  >
+    Вернуться ко всей книге
+  </a>
   <div class="chapter-actions">
     <button
       (click)="showText.set(!showText())"
@@ -18,7 +24,7 @@
   </div>
 
   <ng-container *ngIf="chapter$ | async as chapter">
-    <div class="mb-1 text-start">
+    <div class="mb-1 text-end">
       <a
         [routerLink]="['/books', bookId, 'chapters', chapter.id, 'edit']"
         class="text-sm text-gray-400 hover:text-gray-600 transition"
