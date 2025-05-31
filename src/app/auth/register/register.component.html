@@ -66,6 +66,13 @@
 
   <button type="submit" class="form-button">Зарегистрироваться</button>
 
+  <div *ngIf="successMessage" class="text-green-600 text-center mt-4">
+    {{ successMessage }}
+    <a [routerLink]="['/auth', 'login']" class="underline ml-1">
+      Теперь вы можете войти!
+    </a>
+  </div>
+
   <div *ngIf="errorMessage" class="form-error">
     {{ errorMessage }}
   </div>

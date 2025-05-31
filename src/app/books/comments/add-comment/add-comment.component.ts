@@ -38,7 +38,7 @@ export class AddCommentComponent {
     };
 
     this.http
-      .post(`${API_BASE_URL}/books/${this.bookId}/comment/`, payload)
+      .post(`${API_BASE_URL}/books/${this.bookId}/comment/upload/`, payload)
       .subscribe({
         next: () => {
           this.successMessage = 'Комментарий успешно добавлен!';

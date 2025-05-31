@@ -41,7 +41,7 @@ export class DeleteChapterComponent implements OnInit {
       .delete(`${API_BASE_URL}/books/${this.bookId}/chapter/${this.chapterId}/delete/`)
       .subscribe({
         next: () => {
-          this.router.navigate(['/books', this.bookId]);
+          this.router.navigate(['/books/detail', this.bookId]);
         },
         error: () => {
           this.errorMessage = 'Ошибка при удалении главы.';
@@ -51,6 +51,6 @@ export class DeleteChapterComponent implements OnInit {
   }
 
   cancel(): void {
-    this.router.navigate(['/books', this.bookId, 'chapters', this.chapterId, 'edit']);
+    this.router.navigate(['/books/detail', this.bookId, 'chapters', 'detail', this.chapterId, 'edit']);
   }
 }

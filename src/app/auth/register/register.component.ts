@@ -3,12 +3,13 @@ import { AuthService } from '../auth.service';
 import { RegisterData } from '../auth.model';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 
 @Component({
   standalone: true,
   selector: 'app-register',
   templateUrl: './register.component.html',
-  imports: [CommonModule, FormsModule]
+  imports: [CommonModule, FormsModule, RouterModule]
 })
 export class RegisterComponent {
   form: RegisterData = {
@@ -23,13 +24,14 @@ export class RegisterComponent {
   };
 
   errorMessage: string = '';
+  successMessage = '';
 
   constructor(private authService: AuthService) {}
 
   onSubmit() {
     this.authService.register(this.form).subscribe({
       next: () => {
-        alert('Регистрация успешна');
+        this.successMessage = 'Регистрация прошла успешно!';
         this.errorMessage = '';
       },
       error: (err) => {
@@ -41,7 +43,6 @@ export class RegisterComponent {
         } else if (errors?.password) {
           this.errorMessage = 'Ошибка с паролем: ' + errors.password.join(', ');
         } else if (typeof errors === 'object') {
-          // Общий случай — собрать и показать все ошибки
           const messages = Object.entries(errors)
             .map(
               ([field, msgs]) => `${field}: ${(msgs as string[]).join(', ')}`

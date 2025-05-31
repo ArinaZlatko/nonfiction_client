@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { API_BASE_URL, BASE_URL } from 'src/app/core/api.config';
 import { CommonModule } from '@angular/common';
 import { AddCommentComponent } from '../comments/add-comment/add-comment.component';
+import { Book } from '../book.model';
 
 @Component({
   standalone: true,
@@ -13,25 +14,18 @@ import { AddCommentComponent } from '../comments/add-comment/add-comment.compone
   imports: [CommonModule, RouterModule, AddCommentComponent],
 })
 export class BookDetailComponent implements OnInit {
-  book: any;
+  book!: Book;
   bookId!: number;
+  isOwner: boolean = false;
   errorMessage: string | null = null;
   BaseUrl = BASE_URL;
 
-  currentUser: string = '';
   userComment: any = null;
-  otherComments: any[] = [];
+  comments: any[] = [];
 
   constructor(private route: ActivatedRoute, private http: HttpClient) {}
 
   ngOnInit() {
-    // Получение имени пользователя из токена (если есть)
-    const token = localStorage.getItem('access_token');
-    if (token) {
-      const payload = JSON.parse(atob(token.split('.')[1]));
-      this.currentUser = payload.username;
-    }
-
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.bookId = +id;
@@ -41,27 +35,31 @@ export class BookDetailComponent implements OnInit {
   }
 
   loadBook(id: string) {
-    this.http.get(API_BASE_URL + '/books/' + id + '/').subscribe({
-      next: (data) => (this.book = data),
+    this.http.get<Book>(API_BASE_URL + '/books/' + id + '/').subscribe({
+      next: (data) => {
+        this.book = data;
+        this.isOwner = data.is_owner;
+      },
       error: () => (this.errorMessage = 'Ошибка загрузки книги'),
     });
   }
 
   loadComments(id: string) {
-    this.http.get<any[]>(`${API_BASE_URL}/books/${id}/comments/`).subscribe({
-      next: (data) => {
-        const user = this.currentUser;
-        this.userComment = data.find((c) => c.user === user) || null;
-        this.otherComments = data
-          .filter((c) => c.user !== user)
-          .sort(
+    this.http
+      .get<{ user_comment: any; other_comments: any[] }>(
+        `${API_BASE_URL}/books/${id}/comments/`
+      )
+      .subscribe({
+        next: (data) => {
+          this.userComment = data.user_comment;
+          this.comments = data.other_comments.sort(
             (a, b) =>
               new Date(b.created_at).getTime() -
               new Date(a.created_at).getTime()
           );
-      },
-      error: () => (this.errorMessage = 'Ошибка загрузки комментариев'),
-    });
+        },
+        error: () => (this.errorMessage = 'Ошибка загрузки комментариев'),
+      });
   }
 
   onCommentAdded() {

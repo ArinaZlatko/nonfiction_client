@@ -4,6 +4,7 @@ import { API_BASE_URL } from '../core/api.config';
 import { TokenResponse } from './auth.model';
 import { Observable, of, throwError } from 'rxjs';
 import { catchError, switchMap } from 'rxjs/operators';
+import { AuthStateService } from './auth-state.service';
 
 @Injectable({ providedIn: 'root' })
 export class TokenService {
@@ -94,5 +95,17 @@ export class TokenService {
     const payload = this.decodeJwt(token);
     const exp = payload?.exp;
     return !exp || Date.now() > exp * 1000;
+  }
+
+  getRole(): string | null {
+    const token = this.getAccessToken();
+    if (!token) return null;
+
+    const payload = this.decodeJwt(token);
+    return payload?.role || null;
+  }
+
+  isRole(role: string): boolean {
+    return this.getRole() === role;
   }
 }

@@ -59,7 +59,7 @@ export class AddBookComponent implements OnInit {
     formData.append('cover', this.coverFile, this.coverFile.name);
 
     this.selectedGenres.forEach((id) =>
-      formData.append('genres', id.toString())
+      formData.append('genre_ids', id.toString())
     );
 
     this.http.post<any>(`${API_BASE_URL}/books/upload/`, formData).subscribe({
