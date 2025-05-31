@@ -14,7 +14,7 @@
   <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
     <a
       *ngFor="let book of books"
-      [routerLink]="['/books', book.id]"
+      [routerLink]="['/books/detail', book.id]"
       class="block h-full border rounded shadow p-4 bg-white hover:shadow-lg transition-shadow duration-200"
     >
       <div *ngIf="book.cover" class="mb-2">

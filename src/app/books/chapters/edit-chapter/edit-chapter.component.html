@@ -1,12 +1,12 @@
 <form (submit)="onSubmit(); $event.preventDefault()" class="form-container">
   <div class="flex justify-between items-center mb-4">
     <a
-      [routerLink]="['/books', bookId, 'chapters', chapterId]"
+      [routerLink]="['/books/detail', bookId, 'chapters', 'detail', chapterId]"
       class="text-sm text-gray-500 hover:text-gray-700"
       >Вернуться к чтению главы</a
     >
     <a
-      [routerLink]="['/books', bookId, 'chapters', chapterId, 'delete']"
+      [routerLink]="['/books/detail', bookId, 'chapters', 'detail', chapterId, 'delete']"
       class="text-sm text-red-400 hover:text-red-600"
       >Удалить главу</a
     >

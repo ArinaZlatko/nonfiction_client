@@ -20,6 +20,7 @@ export class BookDetailComponent implements OnInit {
   errorMessage: string | null = null;
   BaseUrl = BASE_URL;
 
+  userComment: any = null;
   comments: any[] = [];
 
   constructor(private route: ActivatedRoute, private http: HttpClient) {}
@@ -44,15 +45,21 @@ export class BookDetailComponent implements OnInit {
   }
 
   loadComments(id: string) {
-    this.http.get<any[]>(`${API_BASE_URL}/books/${id}/comments/`).subscribe({
-      next: (data) => {
-        this.comments = data.sort(
-          (a, b) =>
-            new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-        );
-      },
-      error: () => (this.errorMessage = 'Ошибка загрузки комментариев'),
-    });
+    this.http
+      .get<{ user_comment: any; other_comments: any[] }>(
+        `${API_BASE_URL}/books/${id}/comments/`
+      )
+      .subscribe({
+        next: (data) => {
+          this.userComment = data.user_comment;
+          this.comments = data.other_comments.sort(
+            (a, b) =>
+              new Date(b.created_at).getTime() -
+              new Date(a.created_at).getTime()
+          );
+        },
+        error: () => (this.errorMessage = 'Ошибка загрузки комментариев'),
+      });
   }
 
   onCommentAdded() {

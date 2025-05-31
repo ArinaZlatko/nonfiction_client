@@ -26,7 +26,7 @@
   <ng-container *ngIf="chapter$ | async as chapter">
     <div class="mb-1 text-end">
       <a
-        [routerLink]="['/books', bookId, 'chapters', chapter.id, 'edit']"
+        [routerLink]="['/books/detail', bookId, 'chapters', 'detail', chapter.id, 'edit']"
         class="text-sm text-gray-400 hover:text-gray-600 transition"
       >
         Редактировать
