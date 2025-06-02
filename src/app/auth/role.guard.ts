@@ -6,7 +6,6 @@ import {
   UrlTree,
   Router,
 } from '@angular/router';
-import { Observable } from 'rxjs';
 import { TokenService } from './token.service';
 
 @Injectable({
