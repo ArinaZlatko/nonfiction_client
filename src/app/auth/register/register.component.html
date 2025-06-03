@@ -41,10 +41,18 @@
     class="form-input"
   />
 
-  <select [(ngModel)]="form.role" name="role" class="form-select">
-    <option value="reader">Читатель</option>
-    <option value="writer">Писатель</option>
-  </select>
+  <ng-select
+    [items]="roles"
+    bindLabel="label"
+    bindValue="value"
+    [(ngModel)]="form.role"
+    name="role"
+    placeholder="Выберите роль"
+    [clearable]="false"
+    required
+    class="form-input simple-selected"
+  >
+  </ng-select>
 
   <input
     [(ngModel)]="form.password"

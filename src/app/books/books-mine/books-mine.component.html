@@ -1,9 +1,6 @@
 <div class="max-w-5xl mx-auto px-4 py-6">
-  <a
-    routerLink="/books/add"
-    class="text-sm text-gray-500 hover:text-gray-700 transition inline-flex items-center mb-4"
-  >
-    Добавить книгу
+  <a routerLink="/books/add" class="inline-block mb-2">
+    <button class="form-button w-auto px-4 py-2">Добавить книгу</button>
   </a>
 
   <p *ngIf="errorMessage" class="text-red-600 mb-4">{{ errorMessage }}</p>

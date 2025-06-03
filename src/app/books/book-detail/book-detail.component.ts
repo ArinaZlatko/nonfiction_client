@@ -15,6 +15,7 @@ import { Book } from '../book.model';
 })
 export class BookDetailComponent implements OnInit {
   book!: Book;
+  average_rating: number | null = null;
   bookId!: number;
   isOwner: boolean = false;
   errorMessage: string | null = null;

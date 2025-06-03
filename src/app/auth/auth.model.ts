@@ -4,7 +4,7 @@ export interface RegisterData {
   first_name: string;
   last_name: string;
   surname: string;
-  role: string;
+  role: string | null;
   password: string;
   password2: string;
 }

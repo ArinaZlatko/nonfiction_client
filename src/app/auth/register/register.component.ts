@@ -4,12 +4,13 @@ import { RegisterData } from '../auth.model';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @Component({
   standalone: true,
   selector: 'app-register',
   templateUrl: './register.component.html',
-  imports: [CommonModule, FormsModule, RouterModule]
+  imports: [CommonModule, FormsModule, RouterModule, NgSelectModule],
 })
 export class RegisterComponent {
   form: RegisterData = {
@@ -20,8 +21,13 @@ export class RegisterComponent {
     first_name: '',
     last_name: '',
     surname: '',
-    role: '',
+    role: null,
   };
+
+  roles = [
+    { label: 'Читатель', value: 'reader' },
+    { label: 'Писатель', value: 'writer' },
+  ];
 
   errorMessage: string = '';
   successMessage = '';

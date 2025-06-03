@@ -52,6 +52,42 @@ ng-select.form-input .ng-input input {
   @apply p-2;
 }
 
+/* Убираем стили тегов выбранных значений для "простой" селект (сортировка) */
+ng-select.simple-selected.form-input .ng-value {
+  @apply bg-transparent text-gray-700 rounded-none p-0 mr-0 mb-0;
+  /* Убираем фоновый цвет, скругления, паддинги и маргины */
+  box-shadow: none;
+  border: none;
+}
+
+/* Убираем иконку удаления выбранного значения (крестик) */
+ng-select.simple-selected.form-input .ng-value-icon {
+  display: none;
+}
+
+/* Немного подправим текст выбранного значения */
+ng-select.simple-selected.form-input .ng-single-label {
+  @apply text-gray-700;
+  padding: 0;
+  margin-left: 0;
+}
+
+/* Выровнять высоту по центру */
+ng-select.simple-selected.form-input .ng-control {
+  @apply h-auto min-h-[2.5rem];
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+/* Входное поле поиска скрыть */
+ng-select.simple-selected.form-input .ng-input input {
+  display: none;
+}
+
+ng-select.form-input .ng-placeholder {
+  @apply text-gray-400;
+}
+
 /* Кнопка отправки */
 .form-button {
   @apply w-full bg-gray-800 text-white py-2 rounded hover:bg-gray-700 transition;
