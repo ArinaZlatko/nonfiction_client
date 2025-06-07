@@ -16,23 +16,38 @@ export class ChapterDetailComponent {
   private chapterService = inject(ChapterService);
 
   bookId = Number(this.route.snapshot.paramMap.get('bookId'));
-  
+
   chapter$ = this.route.paramMap.pipe(
     switchMap((params) => {
       const bookId = params.get('bookId')!;
       const chapterId = params.get('chapterId')!;
       return this.chapterService.getChapterDetail(+bookId, +chapterId);
     }),
-    map((chapter) => ({
-      ...chapter,
-      content: chapter.content ? chapter.content.replace(/\n/g, '<br>') : '',
-    }))
+    map((chapter) => {
+      const hasImgs = (chapter.images?.length ?? 0) > 0;
+      this.hasImages.set(hasImgs);
+
+      if (!hasImgs) {
+        this.showImages.set(false);
+      } else {
+        this.showImages.set(true);
+      }
+
+      return {
+        ...chapter,
+        content: chapter.content ? chapter.content.replace(/\n/g, '<br>') : '',
+      };
+    })
   );
 
+  // Отображение текста и изображений
   showText = signal(true);
   showImages = signal(true);
 
-  // Вычисление ширин
+  // Флаг наличия изображений
+  hasImages = signal(false);
+
+  // Вычисление ширины текста и изображений
   textWidth = computed(() => {
     return this.showText() && !this.showImages()
       ? 1
@@ -49,10 +64,10 @@ export class ChapterDetailComponent {
       : 0;
   });
 
-  // Внутреннее состояние ширины
+  // Внутренний сигнал ширины текста
   private _textWidth = signal(0.5);
 
-  // Обработчик перетаскивания
+  // Обработчик перетаскивания границы
   onDrag(event: MouseEvent) {
     event.preventDefault();
     const container = document.querySelector('.chapter-layout')!;
@@ -77,6 +92,7 @@ export class ChapterDetailComponent {
     window.addEventListener('mouseup', onMouseUp);
   }
 
+  // Вычисление доступной высоты экрана
   calcAvailableHeight() {
     const headerHeight = 64;
     const footerHeight = 56;

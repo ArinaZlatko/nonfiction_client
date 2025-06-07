@@ -5,6 +5,7 @@ import { API_BASE_URL, BASE_URL } from 'src/app/core/api.config';
 import { CommonModule } from '@angular/common';
 import { AddCommentComponent } from '../comments/add-comment/add-comment.component';
 import { Book } from '../book.model';
+import { AuthService } from 'src/app/auth/auth.service';
 
 @Component({
   standalone: true,
@@ -23,10 +24,17 @@ export class BookDetailComponent implements OnInit {
 
   userComment: any = null;
   comments: any[] = [];
+  isAuthenticated: boolean = false;
 
-  constructor(private route: ActivatedRoute, private http: HttpClient) {}
+  constructor(
+    private route: ActivatedRoute,
+    private http: HttpClient,
+    private authService: AuthService
+  ) {}
 
   ngOnInit() {
+    this.isAuthenticated = this.authService.isAuthenticated();
+
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.bookId = +id;

@@ -55,7 +55,6 @@ ng-select.form-input .ng-input input {
 /* Убираем стили тегов выбранных значений для "простой" селект (сортировка) */
 ng-select.simple-selected.form-input .ng-value {
   @apply bg-transparent text-gray-700 rounded-none p-0 mr-0 mb-0;
-  /* Убираем фоновый цвет, скругления, паддинги и маргины */
   box-shadow: none;
   border: none;
 }

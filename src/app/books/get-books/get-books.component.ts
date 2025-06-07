@@ -63,7 +63,6 @@ export class GetBooksComponent implements OnInit {
       params = params.set('search', this.searchTerm);
     }
 
-    // Добавляем параметры сортировки, если выбраны
     if (this.sortField) {
       params = params.set('sort_field', this.sortField);
       params = params.set('sort_direction', this.sortDirection);

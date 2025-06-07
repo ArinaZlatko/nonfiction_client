@@ -16,6 +16,9 @@ export class EditBookComponent implements OnInit {
   bookId!: number;
   title = '';
   description = '';
+  coverFile: File | null = null;
+  showCoverUpload = false;
+
   genres: any[] = [];
   selectedGenres: number[] = [];
 
@@ -27,23 +30,29 @@ export class EditBookComponent implements OnInit {
   ngOnInit(): void {
     this.bookId = Number(this.route.snapshot.paramMap.get('id'));
 
-    // Загрузка жанров для селектора
+    // Загрузка жанров
     this.http.get<any[]>(`${API_BASE_URL}/genres/`).subscribe({
       next: (data) => (this.genres = data),
       error: () => (this.errorMessage = 'Не удалось загрузить жанры'),
     });
 
-    // Загрузка книги
+    // Загрузка данных книги
     this.http.get<any>(`${API_BASE_URL}/books/${this.bookId}/`).subscribe({
       next: (data) => {
         this.title = data.title;
         this.description = data.description;
-        this.selectedGenres = data.genres.map((g: any) => g.id); // ! <-- изменено
+        this.selectedGenres = data.genres.map((g: any) => g.id);
       },
       error: () => {
         this.errorMessage = 'Не удалось загрузить данные книги';
       },
     });
+  }
+
+  onFileChange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    if (file) this.coverFile = file;
   }
 
   onSubmit(): void {
@@ -64,9 +73,13 @@ export class EditBookComponent implements OnInit {
     formData.append('title', this.title);
     formData.append('description', this.description);
 
-    this.selectedGenres.forEach(
-      (id) => formData.append('genre_ids', id.toString())
-    );
+    if (this.coverFile) {
+      formData.append('cover', this.coverFile, this.coverFile.name);
+    }
+
+    this.selectedGenres.forEach((id) => {
+      formData.append('genre_ids', id.toString());
+    });
 
     this.http
       .put<any>(`${API_BASE_URL}/books/${this.bookId}/edit/`, formData)
