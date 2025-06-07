@@ -4,7 +4,6 @@ import { API_BASE_URL } from '../core/api.config';
 import { TokenResponse } from './auth.model';
 import { Observable, of, throwError } from 'rxjs';
 import { catchError, switchMap } from 'rxjs/operators';
-import { AuthStateService } from './auth-state.service';
 
 @Injectable({ providedIn: 'root' })
 export class TokenService {

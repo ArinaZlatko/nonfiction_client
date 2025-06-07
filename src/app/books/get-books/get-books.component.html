@@ -1,15 +1,93 @@
 <div class="max-w-5xl mx-auto px-4 py-6">
-  <p *ngIf="errorMessage" class="text-red-600 mb-4">{{ errorMessage }}</p>
+  <p *ngIf="errorMessage" class="form-error">{{ errorMessage }}</p>
 
-  <div *ngIf="books.length === 0 && !errorMessage" class="text-gray-500">
+  <h2 class="form-title">Фильтрация и сортировка книг</h2>
+
+  <div class="grid md:grid-cols-5 gap-4 items-start">
+    <!-- Жанры -->
+    <ng-select
+      [items]="genres"
+      bindLabel="name"
+      bindValue="id"
+      [(ngModel)]="selectedGenres"
+      [multiple]="true"
+      [searchable]="true"
+      [clearable]="true"
+      [hideSelected]="true"
+      placeholder="Выберите жанры..."
+      (change)="applyFilters()"
+      class="form-input"
+    >
+    </ng-select>
+
+    <!-- Авторы -->
+    <ng-select
+      [items]="authors"
+      bindLabel="fullName"
+      bindValue="id"
+      [(ngModel)]="selectedAuthor"
+      [searchable]="true"
+      [clearable]="true"
+      placeholder="Выберите автора..."
+      (change)="applyFilters()"
+      class="form-input"
+    >
+    </ng-select>
+
+    <!-- Поиск -->
+    <input
+      [(ngModel)]="searchTerm"
+      (input)="applyFilters()"
+      type="text"
+      placeholder="Поиск по названию"
+      class="form-input"
+    />
+
+    <!-- Сортировка по полю -->
+    <ng-select
+      [items]="sortFields"
+      bindLabel="label"
+      bindValue="value"
+      [(ngModel)]="sortField"
+      (change)="onSortFieldChange(sortField)"
+      [clearable]="true"
+      placeholder="Сортировать по"
+      class="form-input simple-selected"
+    >
+    </ng-select>
+
+    <!-- Направление сортировки -->
+    <ng-select
+      [items]="sortDirections"
+      bindLabel="label"
+      bindValue="value"
+      [(ngModel)]="sortDirection"
+      (change)="onSortDirectionChange(sortDirection)"
+      [disabled]="!sortField"
+      class="form-input simple-selected"
+    >
+    </ng-select>
+  </div>
+
+  <div *ngIf="books.length === 0 && !errorMessage" class="text-gray-500 mt-4">
     Книг пока нет.
   </div>
-  <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+
+  <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mt-6">
     <a
       *ngFor="let book of books"
       [routerLink]="['/books/detail', book.id]"
-      class="block h-full border rounded shadow p-4 bg-white hover:shadow-lg transition-shadow duration-200"
+      class="relative block h-full border rounded shadow p-4 bg-white hover:shadow-lg transition-shadow duration-200"
     >
+      <!-- Рейтинг -->
+      <div
+        *ngIf="book.average_rating !== null"
+        [ngClass]="getRatingClasses(book.average_rating)"
+        class="absolute top-2 right-2 text-xs font-bold px-2 py-1 rounded-full shadow-sm"
+      >
+        ★ {{ book.average_rating | number : "1.1-1" }}
+      </div>
+
       <div *ngIf="book.cover" class="mb-2">
         <img
           [src]="BaseUrl + book.cover"
@@ -17,11 +95,17 @@
           class="w-full max-h-48 object-cover rounded"
         />
       </div>
+
       <div class="text-lg font-semibold mb-2">{{ book.title }}</div>
+
       <div class="text-sm text-gray-600 mb-2">
         Автор: {{ book.author.first_name | slice : 0 : 1 }}.
         {{ book.author.last_name | slice : 0 : 1 }}. {{ book.author.surname }}
       </div>
+      <div class="text-sm text-gray-600 mb-2">
+        Дата: {{ book.created_at | date : "dd.MM.yyyy" }}
+      </div>
+
       <div class="flex flex-wrap gap-2">
         <span
           *ngFor="let genre of book.genres"

@@ -77,9 +77,9 @@ export class AddChapterComponent implements OnInit {
 
     images.forEach((img) => {
       if (img.file) {
-        formData.append('images', img.file, img.file.name); // <-- исправлено
-        formData.append('captions', img.caption); // <-- исправлено
-        formData.append('orders', img.order.toString()); // <-- исправлено
+        formData.append('images', img.file, img.file.name);
+        formData.append('captions', img.caption);
+        formData.append('orders', img.order.toString());
       }
     });
 

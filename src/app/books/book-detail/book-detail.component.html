@@ -29,6 +29,9 @@
   <p class="text-gray-700 mb-4">{{ book.description }}</p>
 
   <p class="text-sm text-gray-600 mb-2">Автор: {{ book.author }}</p>
+  <p class="text-sm text-gray-600 mb-2">
+    Дата: {{ book.created_at | date : "dd.MM.yyyy" }}
+  </p>
 
   <div class="flex flex-wrap gap-2 mb-4">
     <span
@@ -45,7 +48,13 @@
       <li *ngFor="let chapter of book.chapters">
         <a
           class="text-sm text-gray-500 hover:text-gray-700 transition inline-flex items-center"
-          [routerLink]="['/books/detail', book.id, 'chapters', 'detail', chapter.id]"
+          [routerLink]="[
+            '/books/detail',
+            book.id,
+            'chapters',
+            'detail',
+            chapter.id
+          ]"
         >
           {{ chapter.title }}
         </a>
@@ -70,15 +79,27 @@
 <p *ngIf="errorMessage" class="text-red-600 text-center mt-4">
   {{ errorMessage }}
 </p>
-
 <!-- Комментарии -->
 <div class="form-container mt-10 w-[80%] mx-auto">
+  <!-- Показываем форму, если пользователь не владелец и не оставлял комментарий -->
   <app-add-comment
-    *ngIf="!isOwner"
+    *ngIf="!isOwner && isAuthenticated && !userComment"
     [bookId]="bookId"
     (commentAdded)="onCommentAdded()"
   ></app-add-comment>
 
+  <!-- Ссылка на авторизацию, если не авторизован -->
+  <div *ngIf="!isAuthenticated" class="text-center text-gray-600 mt-6 text-sm">
+    Чтобы оставить комментарий,
+    <a
+      routerLink="/auth/login"
+      class="text-orange-600 hover:underline font-medium"
+    >
+      войдите в аккаунт</a
+    >.
+  </div>
+
+  <!-- Комментарий пользователя -->
   <h3
     *ngIf="userComment"
     class="text-xl font-semibold mb-6 border-b pb-2 border-gray-300 text-gray-800"
