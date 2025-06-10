@@ -4,17 +4,26 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { API_BASE_URL } from 'src/app/core/api.config';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @Component({
   standalone: true,
   selector: 'app-add-comment',
   templateUrl: './add-comment.component.html',
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule, NgSelectModule],
 })
 export class AddCommentComponent {
   @Input() bookId!: number;
 
   content = '';
+  ratingOptions = [
+    { label: '1', value: 1 },
+    { label: '2', value: 2 },
+    { label: '3', value: 3 },
+    { label: '4', value: 4 },
+    { label: '5', value: 5 },
+  ];
+
   rating: number | null = null;
   errorMessage = '';
   successMessage = '';
