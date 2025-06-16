@@ -13,6 +13,7 @@ export interface ChapterDetail {
     caption: string;
     order: number;
   }[];
+  is_owner: boolean;
 }
 
 @Injectable({ providedIn: 'root' })

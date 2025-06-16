@@ -26,6 +26,7 @@
   <ng-container *ngIf="chapter$ | async as chapter">
     <div class="mb-1 text-end">
       <a
+        *ngIf="isOwner()"
         [routerLink]="[
           '/books/detail',
           bookId,
