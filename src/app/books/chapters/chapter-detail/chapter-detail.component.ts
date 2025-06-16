@@ -17,25 +17,24 @@ export class ChapterDetailComponent {
 
   bookId = Number(this.route.snapshot.paramMap.get('bookId'));
 
+  isOwner = signal(false);
+
   chapter$ = this.route.paramMap.pipe(
     switchMap((params) => {
-      const bookId = params.get('bookId')!;
-      const chapterId = params.get('chapterId')!;
-      return this.chapterService.getChapterDetail(+bookId, +chapterId);
+      const bookId = +params.get('bookId')!;
+      const chapterId = +params.get('chapterId')!;
+      return this.chapterService.getChapterDetail(bookId, chapterId);
     }),
     map((chapter) => {
       const hasImgs = (chapter.images?.length ?? 0) > 0;
       this.hasImages.set(hasImgs);
+      this.showImages.set(hasImgs);
 
-      if (!hasImgs) {
-        this.showImages.set(false);
-      } else {
-        this.showImages.set(true);
-      }
+      this.isOwner.set(chapter.is_owner);
 
       return {
         ...chapter,
-        content: chapter.content ? chapter.content.replace(/\n/g, '<br>') : '',
+        content: chapter.content?.replace(/\n/g, '<br>') ?? '',
       };
     })
   );
